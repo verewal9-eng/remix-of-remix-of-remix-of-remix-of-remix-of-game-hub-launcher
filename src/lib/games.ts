@@ -106,7 +106,14 @@ export const staticGames: Game[] = [
   },
 ];
 
-export const getGame = (id: string) => games.find((g) => g.id === id);
+/** Общий каталог: игры, загруженные админами, плюс демо-каталог. */
+export const games: Game[] = [...staticGames];
+
+export function setRemoteGames(list: Game[]) {
+  games.splice(0, games.length, ...list, ...staticGames);
+}
+
+export const getGame = (id: string): Game | undefined => games.find((g) => g.id === id);
 
 export const finalPrice = (g: Game) => Math.round((g.price * (100 - g.discount)) / 100);
 
