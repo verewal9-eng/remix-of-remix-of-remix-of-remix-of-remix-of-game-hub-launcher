@@ -23,7 +23,7 @@ const baseTitles = [
   ["Легенда", "Завершите игру на максимальной сложности"],
 ];
 
-const icons = ["🏹", "🛡", "⚔", "🔥", "💀", "🌑", "⭐", "🎯", "🧭", "🏆"];
+const icons = ["target", "shield", "swords", "flame", "skull", "moon", "star", "crosshair", "compass", "trophy"];
 
 function seededDefaults(gameId: string): Achievement[] {
   let h = 0;
