@@ -29,14 +29,21 @@ function seededDefaults(gameId: string): Achievement[] {
   let h = 0;
   for (let i = 0; i < gameId.length; i += 1) h = (h * 31 + gameId.charCodeAt(i)) | 0;
   const seed = Math.abs(h);
-  return baseTitles.map(([title, description], i) => ({
-    id: `${gameId}-base-${i}`,
-    gameId,
-    title: title!,
-    description: description!,
-    icon: icons[(seed + i) % icons.length]!,
-    unlockedAt: (seed + i) % 3 === 0 ? new Date(2025, (seed + i) % 12, ((seed + i) % 27) + 1).toISOString() : undefined,
-  }));
+  return baseTitles.map(([title, description], i) => {
+    const unlocked = (seed + i) % 3 === 0;
+    const base: Achievement = {
+      id: `${gameId}-base-${i}`,
+      gameId,
+      title: title!,
+      description: description!,
+      icon: icons[(seed + i) % icons.length]!,
+    };
+    if (!unlocked) return base;
+    return {
+      ...base,
+      unlockedAt: new Date(2025, (seed + i) % 12, ((seed + i) % 27) + 1).toISOString(),
+    };
+  });
 }
 
 type Ctx = {

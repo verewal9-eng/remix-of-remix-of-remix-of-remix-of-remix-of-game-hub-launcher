@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { LibraryProvider } from "@/lib/library";
+import { AchievementsProvider } from "@/lib/achievements";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteSidebar } from "@/components/SiteSidebar";
 import { reportLovableError } from "../lib/lovable-error-reporting";
