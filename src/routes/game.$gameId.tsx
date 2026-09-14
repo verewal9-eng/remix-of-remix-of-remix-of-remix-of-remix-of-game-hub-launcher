@@ -1,6 +1,18 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
-import { Play } from "lucide-react";
+import {
+  Compass,
+  Crosshair,
+  Flame,
+  Moon,
+  Play,
+  Shield,
+  Skull,
+  Star,
+  Swords,
+  Target,
+  Trophy,
+} from "lucide-react";
 import { getGame } from "@/lib/games";
 import { useLibrary } from "@/lib/library";
 import { useAchievements } from "@/lib/achievements";
@@ -28,6 +40,25 @@ export const Route = createFileRoute("/game/$gameId")({
   },
   component: GamePage,
 });
+
+const iconMap: Record<string, typeof Trophy> = {
+  target: Target,
+  shield: Shield,
+  swords: Swords,
+  flame: Flame,
+  skull: Skull,
+  moon: Moon,
+  star: Star,
+  crosshair: Crosshair,
+  compass: Compass,
+  trophy: Trophy,
+};
+
+function AchIcon({ icon, className }: { icon: string; className?: string }) {
+  const Cmp = iconMap[icon];
+  if (Cmp) return <Cmp className={className ?? "h-5 w-5"} aria-hidden />;
+  return <span className="text-lg">{icon}</span>;
+}
 
 const links = [
   "Сообщество",
@@ -66,7 +97,7 @@ function GamePage() {
   const game = getGame(gameId);
   const { entries, play } = useLibrary();
   const { getAchievements, addAchievement, removeAchievement } = useAchievements();
-  const [form, setForm] = useState({ title: "", description: "", icon: "🏆" });
+  const [form, setForm] = useState({ title: "", description: "", icon: "trophy" });
   const [open, setOpen] = useState(false);
 
   if (!game) return null;
@@ -86,9 +117,9 @@ function GamePage() {
       gameId: game.id,
       title: form.title.trim(),
       description: form.description.trim(),
-      icon: form.icon || "🏆",
+      icon: form.icon || "trophy",
     });
-    setForm({ title: "", description: "", icon: "🏆" });
+    setForm({ title: "", description: "", icon: "trophy" });
   };
 
   const lastPlayed = entry?.lastPlayed
@@ -145,7 +176,7 @@ function GamePage() {
 
           {/* Друзья */}
           <section className="flex gap-5">
-            <h2 className="w-16 shrink-0 pt-4 text-right font-display text-lg font-semibold">Друзья</h2>
+            <h2 className="w-24 shrink-0 pt-4 text-right font-display text-lg font-semibold">Друзья</h2>
             <div className="flex-1 rounded-sm border border-border/60 bg-surface/70 p-4">
               <p className="text-sm text-muted-foreground">
                 Игра куплена у {owners.length} ваших друзей · всего владельцев: {totalOwners}
@@ -185,13 +216,13 @@ function GamePage() {
 
           {/* Достижения */}
           <section className="flex gap-5">
-            <h2 className="w-16 shrink-0 pt-4 text-right font-display text-lg font-semibold">Достижения</h2>
+            <h2 className="w-24 shrink-0 pt-4 text-right font-display text-lg font-semibold">Достижения</h2>
             <div className="flex-1 space-y-3">
               <div className="rounded-sm border border-border/60 bg-surface/70 p-4">
                 {latest ? (
                   <div className="flex items-center gap-4">
-                    <span className="flex h-12 w-12 items-center justify-center rounded bg-surface-2 text-2xl">
-                      {latest.icon}
+                    <span className="flex h-12 w-12 items-center justify-center rounded bg-surface-2">
+                      <AchIcon icon={latest.icon} className="h-6 w-6" />
                     </span>
                     <div className="min-w-0">
                       <p className="text-xs text-muted-foreground">Последнее полученное достижение</p>
@@ -211,11 +242,11 @@ function GamePage() {
                   <span
                     key={a.id}
                     title={`${a.title} — ${a.description}`}
-                    className={`flex h-10 w-10 items-center justify-center rounded bg-surface-2 text-lg ${
+                    className={`flex h-10 w-10 items-center justify-center rounded bg-surface-2 ${
                       a.unlockedAt ? "" : "opacity-35 grayscale"
                     }`}
                   >
-                    {a.icon}
+                    <AchIcon icon={a.icon} />
                   </span>
                 ))}
                 {achievements.length > 8 ? (
@@ -284,7 +315,7 @@ function GamePage() {
                             key={a.id}
                             className="flex items-center gap-3 rounded bg-surface-2/60 px-3 py-2 text-sm"
                           >
-                            <span className="text-lg">{a.icon}</span>
+                            <AchIcon icon={a.icon} />
                             <span className="font-medium">{a.title}</span>
                             <span className="truncate text-muted-foreground">{a.description}</span>
                             <button
@@ -305,7 +336,7 @@ function GamePage() {
 
           {/* Новости */}
           <section className="flex gap-5">
-            <h2 className="w-16 shrink-0 pt-4 text-right font-display text-lg font-semibold leading-tight">
+            <h2 className="w-24 shrink-0 pt-4 text-right font-display text-lg font-semibold leading-tight">
               Последние новости
             </h2>
             <div className="flex-1 divide-y divide-border/60 rounded-sm border border-border/60 bg-surface/70">
