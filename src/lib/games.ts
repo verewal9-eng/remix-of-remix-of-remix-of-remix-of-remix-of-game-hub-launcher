@@ -17,9 +17,12 @@ export type Game = {
   rating: string;
   image: string;
   fileName: string;
+  /** путь установщика в хранилище (для игр, загруженных админом) */
+  installerPath?: string;
+  remote?: boolean;
 };
 
-export const games: Game[] = [
+export const staticGames: Game[] = [
   {
     id: "nova-protocol",
     title: "Nova Protocol",
@@ -103,7 +106,14 @@ export const games: Game[] = [
   },
 ];
 
-export const getGame = (id: string) => games.find((g) => g.id === id);
+/** Общий каталог: игры, загруженные админами, плюс демо-каталог. */
+export const games: Game[] = [...staticGames];
+
+export function setRemoteGames(list: Game[]) {
+  games.splice(0, games.length, ...list, ...staticGames);
+}
+
+export const getGame = (id: string): Game | undefined => games.find((g) => g.id === id);
 
 export const finalPrice = (g: Game) => Math.round((g.price * (100 - g.discount)) / 100);
 
