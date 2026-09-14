@@ -58,3 +58,17 @@ export function getGameOwners(gameId: string) {
   const extra = 48 + (hash(gameId) % 40);
   return { owners, playing, totalOwners: owners.length + extra };
 }
+
+// Кто загрузил игру в магазин (владелец страницы игры и её достижений).
+const publishers: Record<string, string> = {
+  "nova-protocol": currentUser.id,
+  "neon-drift": currentUser.id,
+};
+
+export function getPublisherId(gameId: string) {
+  return publishers[gameId] ?? "studio";
+}
+
+export function isPublisher(gameId: string) {
+  return getPublisherId(gameId) === currentUser.id;
+}
