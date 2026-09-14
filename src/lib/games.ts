@@ -17,9 +17,12 @@ export type Game = {
   rating: string;
   image: string;
   fileName: string;
+  /** путь установщика в хранилище (для игр, загруженных админом) */
+  installerPath?: string;
+  remote?: boolean;
 };
 
-export const games: Game[] = [
+export const staticGames: Game[] = [
   {
     id: "nova-protocol",
     title: "Nova Protocol",
