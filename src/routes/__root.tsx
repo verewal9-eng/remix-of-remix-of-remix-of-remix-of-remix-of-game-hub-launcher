@@ -125,8 +125,8 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <LibraryProvider>
-        <div className="min-h-screen p-0 lg:p-6">
-          <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-[1600px] overflow-hidden rounded-none border border-border/70 bg-background shadow-card lg:rounded-2xl">
+        <div className="min-h-screen p-0 lg:p-10">
+          <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-[1500px] overflow-hidden rounded-none bg-background shadow-[0_40px_120px_-30px_rgba(0,0,0,0.85)] lg:rounded-[26px]">
             <SiteSidebar />
             <div className="flex min-w-0 flex-1 flex-col">
               <SiteHeader />
@@ -134,9 +134,6 @@ function RootComponent() {
               <main className="min-w-0 flex-1">
                 <Outlet />
               </main>
-              <footer className="border-t border-border/60 px-6 py-6 text-xs text-muted-foreground">
-                Nebula — демонстрационная игровая витрина.
-              </footer>
             </div>
           </div>
         </div>

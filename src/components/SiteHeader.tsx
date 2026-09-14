@@ -1,65 +1,52 @@
-import { Link, useRouter } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, Bell, ChevronDown, CircleDollarSign, Image, MessageSquare, Search } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { Bell, Copy, Search, ShoppingCart } from "lucide-react";
+import { games } from "@/lib/games";
 import { useLibrary } from "@/lib/library";
 
 export function SiteHeader() {
-  const router = useRouter();
   const { entries } = useLibrary();
   const downloading = Object.values(entries).filter((e) => e.status === "downloading").length;
 
   return (
-    <header className="flex items-center gap-3 px-5 py-4">
+    <header className="flex items-center justify-end gap-6 px-6 pb-6 pt-7">
       <button
-        aria-label="Назад"
-        onClick={() => router.history.back()}
-        className="flex h-9 w-9 items-center justify-center rounded-full bg-surface-2 text-muted-foreground transition-colors hover:text-foreground"
+        aria-label="Поиск"
+        className="flex h-11 w-11 items-center justify-center rounded-full border border-border text-foreground transition-colors hover:bg-surface-2"
       >
-        <ArrowLeft className="h-4 w-4" aria-hidden />
-      </button>
-      <button
-        aria-label="Вперёд"
-        onClick={() => router.history.forward()}
-        className="flex h-9 w-9 items-center justify-center rounded-full bg-surface-2 text-muted-foreground transition-colors hover:text-foreground"
-      >
-        <ArrowRight className="h-4 w-4" aria-hidden />
+        <Search className="h-[18px] w-[18px]" aria-hidden />
       </button>
 
-      <label className="relative hidden min-w-0 flex-1 max-w-md sm:block">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
-        <input
-          placeholder="Поиск"
-          aria-label="Поиск по Nebula"
-          className="h-9 w-full rounded-full bg-surface-2 pl-10 pr-4 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring"
-        />
-      </label>
-
-      <Link
-        to="/library"
-        className="rounded-full bg-accent/15 px-4 py-2 text-sm font-semibold text-accent transition-colors hover:bg-accent/25"
-      >
-        Желаемое
-      </Link>
-
-      <div className="ml-auto flex items-center gap-2">
-        <span className="hidden items-center gap-2 rounded-full bg-surface-2 px-3 py-2 text-sm text-muted-foreground sm:flex">
-          <Bell className="h-4 w-4" aria-hidden /> {downloading || 4}
-        </span>
-        <span className="hidden items-center gap-2 rounded-full bg-surface-2 px-3 py-2 text-sm text-muted-foreground sm:flex">
-          <MessageSquare className="h-4 w-4" aria-hidden /> 6
-        </span>
-        <span className="hidden h-9 w-9 items-center justify-center rounded-full bg-success/20 text-success sm:flex">
-          <CircleDollarSign className="h-4 w-4" aria-hidden />
-        </span>
-        <span className="flex items-center gap-2 rounded-full bg-surface-2 py-1 pl-1 pr-3 text-sm">
-          <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary font-display text-xs font-bold text-primary-foreground">
-            A
+      <div className="flex items-center gap-5">
+        <Link to="/library" aria-label="Корзина" className="relative text-foreground/90 hover:text-foreground">
+          <ShoppingCart className="h-[22px] w-[22px]" aria-hidden />
+          <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground">
+            {Object.keys(entries).length || 3}
           </span>
-          Игрок
-          <ChevronDown className="h-3 w-3 text-muted-foreground" aria-hidden />
+        </Link>
+        <span className="relative text-foreground/90">
+          <Bell className="h-[22px] w-[22px]" aria-hidden />
+          <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-accent" aria-hidden />
         </span>
-        <span className="hidden h-9 w-9 items-center justify-center rounded-lg bg-surface-2 text-muted-foreground xl:flex">
-          <Image className="h-4 w-4" aria-hidden />
+        <span className="relative text-foreground/90">
+          <Copy className="h-[22px] w-[22px]" aria-hidden />
+          {downloading > 0 && (
+            <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-success" aria-hidden />
+          )}
         </span>
+      </div>
+
+      <div className="flex items-center gap-3">
+        <div className="text-right">
+          <p className="text-sm font-semibold leading-tight">Desmond Miles</p>
+          <p className="flex items-center justify-end gap-1.5 text-[11px] text-muted-foreground">
+            <span className="h-1.5 w-1.5 rounded-full bg-success" aria-hidden /> В сети
+          </p>
+        </div>
+        <img
+          src={games[0]!.image}
+          alt="Ваш аватар"
+          className="h-10 w-10 rounded-full object-cover ring-2 ring-border"
+        />
       </div>
     </header>
   );

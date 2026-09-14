@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { GameCard } from "@/components/GameCard";
-import { GameActions } from "@/components/GameActions";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { finalPrice, formatPrice, games } from "@/lib/games";
+import { GameActions } from "@/components/GameActions";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,65 +26,166 @@ export const Route = createFileRoute("/")({
 
 function StorePage() {
   const featured = games[0]!;
-  const deals = games.filter((g) => g.discount > 0);
+  const popular = games.slice(1, 5);
+  const free = games[5]!;
+  const news = games.slice(1, 4);
 
   return (
-    <div className="px-5 pb-10">
-      <h1 className="sr-only">Магазин игр Nebula</h1>
+    <div className="grid gap-8 px-6 pb-8 xl:grid-cols-[minmax(0,1fr)_320px]">
+      <div className="min-w-0">
+        <h1 className="sr-only">Магазин игр Nebula</h1>
 
-      <section className="overflow-hidden rounded-2xl surface-panel">
-        <div className="grid gap-0 lg:grid-cols-[1.4fr_1fr]">
+        {/* Hero */}
+        <section className="relative overflow-hidden rounded-[18px]">
           <img
             src={featured.image}
             alt={`Обложка игры ${featured.title}`}
-            width={1088}
-            height={608}
-            className="h-full w-full object-cover"
+            className="h-[340px] w-full object-cover"
           />
-          <div className="flex flex-col justify-center gap-4 p-6 lg:p-8">
-            <span className="w-fit rounded bg-primary/15 px-2 py-1 text-xs font-semibold uppercase tracking-widest text-primary">
-              Главное в магазине
-            </span>
-            <h2 className="font-display text-3xl font-bold lg:text-4xl">{featured.title}</h2>
-            <p className="text-muted-foreground">{featured.description}</p>
-            <div className="flex items-baseline gap-3">
-              <span className="rounded bg-accent px-2 py-1 font-display font-bold text-accent-foreground">
-                -{featured.discount}%
-              </span>
-              <span className="text-muted-foreground line-through">{formatPrice(featured.price)}</span>
-              <span className="font-display text-2xl font-bold text-primary">
-                {formatPrice(finalPrice(featured))}
-              </span>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-black/60" />
+          <div className="absolute inset-0 flex flex-col justify-center px-10">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/70">
+              {featured.studio}
+            </p>
+            <h2 className="mt-3 max-w-[520px] font-display text-5xl font-bold uppercase leading-[0.95] tracking-wide text-white lg:text-6xl">
+              {featured.title}
+            </h2>
+            <div className="mt-6 max-w-[280px]">
+              <GameActions game={featured} />
             </div>
-            <GameActions game={featured} />
-            <Link
-              to="/game/$gameId"
-              params={{ gameId: featured.id }}
-              className="text-sm font-semibold text-primary hover:underline"
-            >
-              Подробнее об игре →
+          </div>
+          <div className="absolute right-8 top-7 flex items-center gap-2">
+            <span className="h-1 w-8 rounded-full bg-white/90" />
+            <span className="h-1 w-8 rounded-full bg-white/40" />
+            <span className="h-1 w-8 rounded-full bg-white/40" />
+          </div>
+        </section>
+
+        {/* Popular */}
+        <section className="mt-8">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="font-display text-2xl font-bold">Популярное</h2>
+            <div className="flex items-center gap-2">
+              <button
+                aria-label="Назад"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <ChevronLeft className="h-4 w-4" aria-hidden />
+              </button>
+              <button
+                aria-label="Вперёд"
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <ChevronRight className="h-4 w-4" aria-hidden />
+              </button>
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {popular.map((game) => (
+              <Link
+                key={game.id}
+                to="/game/$gameId"
+                params={{ gameId: game.id }}
+                className="group relative block overflow-hidden rounded-[14px]"
+              >
+                <img
+                  src={game.image}
+                  alt={`Обложка игры ${game.title}`}
+                  className="h-[250px] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
+                {game.discount > 0 && (
+                  <span className="absolute left-3 top-3 rounded bg-accent px-2 py-0.5 text-[10px] font-bold uppercase text-accent-foreground">
+                    -{game.discount}%
+                  </span>
+                )}
+                <div className="absolute bottom-0 left-0 right-0 p-4">
+                  <h3 className="font-display text-base font-bold leading-tight text-white">
+                    {game.title}
+                  </h3>
+                  <p className="mt-1 text-sm font-semibold text-white">
+                    {formatPrice(finalPrice(game))}
+                  </p>
+                  {game.discount > 0 && (
+                    <p className="text-[11px] text-white/50 line-through">{formatPrice(game.price)}</p>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      {/* Right column */}
+      <div className="flex min-w-0 flex-col gap-8">
+        <section>
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="font-display text-xl font-bold">Бесплатно</h2>
+            <Link to="/library" className="text-xs text-muted-foreground hover:text-foreground">
+              Все
             </Link>
           </div>
-        </div>
-      </section>
+          <div className="overflow-hidden rounded-[14px] bg-surface">
+            <div className="relative">
+              <img
+                src={free.image}
+                alt={`Обложка игры ${free.title}`}
+                className="h-[190px] w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent" />
+              <div className="absolute bottom-3 left-4 right-4">
+                <p className="text-xs text-white/70">Бесплатно ещё</p>
+                <div className="mt-1 flex items-end gap-5">
+                  {[
+                    ["8", "дней"],
+                    ["15", "часов"],
+                    ["43", "минуты"],
+                  ].map(([value, label]) => (
+                    <div key={label}>
+                      <p className="font-display text-2xl font-bold leading-none text-white">{value}</p>
+                      <p className="text-[10px] text-white/60">{label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <Link
+              to="/game/$gameId"
+              params={{ gameId: free.id }}
+              className="block bg-primary py-3 text-center text-sm font-bold uppercase tracking-wide text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Играть сейчас
+            </Link>
+          </div>
+        </section>
 
-      <section className="mt-12">
-        <h2 className="mb-4 font-display text-2xl font-bold">Специальные предложения</h2>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {deals.map((game) => (
-            <GameCard key={game.id} game={game} />
-          ))}
-        </div>
-      </section>
-
-      <section className="mt-12">
-        <h2 className="mb-4 font-display text-2xl font-bold">Весь каталог</h2>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {games.map((game) => (
-            <GameCard key={game.id} game={game} />
-          ))}
-        </div>
-      </section>
+        <section>
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="font-display text-xl font-bold">Новости</h2>
+            <Link to="/library" className="text-xs text-muted-foreground hover:text-foreground">
+              Все
+            </Link>
+          </div>
+          <ul className="flex flex-col gap-4">
+            {news.map((game) => (
+              <li key={game.id} className="flex gap-3">
+                <img
+                  src={game.image}
+                  alt=""
+                  className="h-14 w-14 shrink-0 rounded-md object-cover"
+                />
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold leading-tight">{game.title}</p>
+                  <p className="mt-1 line-clamp-3 text-[11px] leading-snug text-muted-foreground">
+                    {game.description}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
     </div>
   );
 }
