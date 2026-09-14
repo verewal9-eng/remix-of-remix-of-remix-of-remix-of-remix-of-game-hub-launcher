@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { LibraryProvider } from "@/lib/library";
+import { AchievementsProvider } from "@/lib/achievements";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteSidebar } from "@/components/SiteSidebar";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -125,6 +126,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <LibraryProvider>
+        <AchievementsProvider>
         <div className="min-h-screen p-0 lg:p-10">
           <div className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-[1500px] overflow-hidden rounded-none bg-background shadow-[0_40px_120px_-30px_rgba(0,0,0,0.85)] lg:rounded-[26px]">
             <SiteSidebar />
@@ -137,6 +139,7 @@ function RootComponent() {
             </div>
           </div>
         </div>
+        </AchievementsProvider>
       </LibraryProvider>
     </QueryClientProvider>
   );
