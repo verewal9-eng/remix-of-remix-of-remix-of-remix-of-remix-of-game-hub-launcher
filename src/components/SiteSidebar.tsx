@@ -33,7 +33,8 @@ export function SiteSidebar() {
 
       <nav className="flex flex-col gap-1 pr-5">
         {nav.map((item, i) => {
-          const active = i === 0 ? pathname === "/" : pathname === item.to && i !== 0;
+          const active =
+            i === 0 ? pathname === "/" : item.to === "/library" && pathname === "/library";
           const Icon = item.icon;
           return (
             <Link
