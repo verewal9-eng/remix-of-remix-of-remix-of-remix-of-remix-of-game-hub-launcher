@@ -29,7 +29,7 @@ function StorePage() {
   const deals = games.filter((g) => g.discount > 0);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
+    <div className="px-5 pb-10">
       <h1 className="sr-only">Магазин игр Nebula</h1>
 
       <section className="overflow-hidden rounded-2xl surface-panel">

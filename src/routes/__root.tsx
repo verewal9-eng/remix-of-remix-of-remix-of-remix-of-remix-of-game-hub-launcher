@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { LibraryProvider } from "@/lib/library";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SiteSidebar } from "@/components/SiteSidebar";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -124,12 +125,21 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <LibraryProvider>
-        <SiteHeader />
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        <footer className="mt-16 border-t border-border py-8 text-center text-sm text-muted-foreground">
-          Nebula — демонстрационная игровая витрина.
-        </footer>
+        <div className="min-h-screen p-0 lg:p-6">
+          <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-[1600px] overflow-hidden rounded-none border border-border/70 bg-background shadow-card lg:rounded-2xl">
+            <SiteSidebar />
+            <div className="flex min-w-0 flex-1 flex-col">
+              <SiteHeader />
+              {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+              <main className="min-w-0 flex-1">
+                <Outlet />
+              </main>
+              <footer className="border-t border-border/60 px-6 py-6 text-xs text-muted-foreground">
+                Nebula — демонстрационная игровая витрина.
+              </footer>
+            </div>
+          </div>
+        </div>
       </LibraryProvider>
     </QueryClientProvider>
   );
